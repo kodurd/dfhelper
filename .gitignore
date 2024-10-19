@@ -1,3 +1,8 @@
 /venv/
 /.pytest_cache/
 /.git/
+/build/
+/dfhelper.egg-info/
+/dist/
+setup.py
+setup.cfg

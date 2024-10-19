@@ -79,7 +79,7 @@ def df_view(*dfs: pd.DataFrame,
                         [None, 'characters', 'words'],
                         method_truncate_text_col)
         method_truncate = method_truncate_text_col if method_truncate_text_col else 'characters'
-        dfs = truncate_dataframe_text(dfs, max_length=max_length_text_col, method=method_truncate)
+        dfs = truncate_dataframe_text(*dfs, max_length=max_length_text_col, method=method_truncate)
 
     html_output = []
     for title, df in zip(titles, dfs):

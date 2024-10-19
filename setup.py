@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from dfhelper import __version__
 
 
 def readme():
@@ -9,7 +8,7 @@ def readme():
 
 setup(
   name='dfhelper',
-  version=f'{__version__}',
+  version='0.0.4',
   author='kodurd',
   author_email='koldunov.eduard1@gmail.com',
   description='dfhelper is a Python package that simplifies data preprocessing and visualization in Jupyter Notebooks.',
