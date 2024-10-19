@@ -4,5 +4,6 @@
 /build/
 /dfhelper.egg-info/
 /dist/
+/.idea/
 setup.py
 setup.cfg

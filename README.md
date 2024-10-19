@@ -1,5 +1,4 @@
 # 🛠️ dfhelper
-___
 
 ## What is this?
 
@@ -7,7 +6,6 @@ Dfhelper is a versatile Python package that streamlines data preprocessing and v
 With intuitive functions for cleaning and transforming pandas DataFrames and the ability to render them as interactive 
 HTML tables, this toolkit is an essential addition to any data scientist's arsenal. Simplify your data analysis process 
 and gain clearer insights with dfhelper.
----
 
 ## Quick installation
 ```
@@ -20,7 +18,6 @@ and gain clearer insights with dfhelper.
 3) Output the size of the date frames in html.
 4) The ability to display dataframes vertically and horizontally
 5) Functions for summarizing the date of Ephraim, created for conducting EDA
----
 
 ## Quick Guide
 ```python
