@@ -22,7 +22,9 @@ def df_view(*dfs: pd.DataFrame,
             orientation: str = 'vert',
             truncate_text: bool = False,
             method_truncate_text_col: Union[str, None] = None,
-            max_length_text_col: int = 50) -> None:
+            max_length_text_col: int = 50,
+            show_titles: bool = True,
+            title_alignment: str = 'left') -> None:
     """
     Displays multiple pandas DataFrames as HTML tables in a Jupyter Notebook with several customizable options.
 
@@ -44,6 +46,9 @@ def df_view(*dfs: pd.DataFrame,
                                                  which treats it as 'characters'.
     max_length_text_col (int): Maximum number of characters or words for text before truncation.
                                Defaults to 50 characters.
+    show_titles (bool): Controls the display of headings. By default, they are displayed.
+    title_alignment (str): Controls the position of the headers. Acceptable values: left, right, center.
+                           Defaults to 'left'
 
     Returns:
     None: Displays the HTML output directly in the Jupyter Notebook.
@@ -62,6 +67,7 @@ def df_view(*dfs: pd.DataFrame,
     """
     assert_dfs_nonempty(dfs)
     validate_choice('orientation', ['vert', 'hor'], orientation)
+    validate_choice('title_alignment', ['left', 'centr', 'right'], title_alignment)
 
     titles = prepare_dataframe_titles(dfs, titles)
 
@@ -77,8 +83,16 @@ def df_view(*dfs: pd.DataFrame,
 
     html_output = []
     for title, df in zip(titles, dfs):
-        html_output.append(f"<h1>{title}</h1>")
-        html_output.append(df.head(number_rows).to_html())
+        df_html = df.head(number_rows).to_html()
+        if show_titles:
+            if title_alignment == 'center':
+                html_output.append(f"<h1 style='text-align: center;'>{title}</h1>{df_html}")
+            elif title_alignment == 'right':
+                html_output.append(f"<h1 style='text-align: right;'>{title}</h1>{df_html}")
+            else:
+                html_output.append(f"<h1 style='text-align: left;'>{title}</h1>{df_html}")
+        else:
+            html_output.append(df_html)
 
     if orientation == 'hor':
         combined_html = "<table><tr>" + "".join(f"<td>{fragment}</td>"
@@ -90,7 +104,10 @@ def df_view(*dfs: pd.DataFrame,
 
 def df_info_view(*dfs: pd.DataFrame,
                  titles: Tuple = (),
-                 orientation: str = 'hor') -> None:
+                 orientation: str = 'hor',
+                 show_titles: bool = True,
+                 title_alignment: str = 'left',
+                 color_line: str = 'green') -> None:
     """
     Displays the info summary of one or more pandas DataFrames in a Jupyter Notebook.
 
@@ -102,15 +119,17 @@ def df_info_view(*dfs: pd.DataFrame,
     dfs (*dfs: pd.DataFrame): One or more pandas DataFrames whose information you want to display.
         - These are the main data structures that contain data, from which summary information
           will be extracted and displayed.
-
     titles (Tuple): An optional tuple of strings that provide custom titles for each DataFrame.
         - Titles enhance readability and context for each DataFrame's information displayed.
         - If empty, default titles are generated like "Dataframe 1", "Dataframe 2", etc.
-
     orientation (str): Specifies the orientation of the displayed DataFrame infos.
         - Acceptable values are 'hor' for horizontal layout and 'vert' for vertical layout.
         - The default orientation is 'hor', which displays DataFrame infos side by side.
         - Orientation affects how the data is visually structured in the output.
+    show_titles (bool): Controls the display of headings. By default, they are displayed.
+    title_alignment (str): Controls the position of the headers. Acceptable values: left, right, center.
+                           Defaults to 'left'
+    color_line (str): The color of the dividing line
 
     Returns:
     None: The function returns no value. Instead, it directly renders HTML content in the Jupyter Notebook cell output.
@@ -147,20 +166,22 @@ def df_info_view(*dfs: pd.DataFrame,
     if orientation == 'hor':
         html_content += "<tr>"
         for name, info in infos:
+            title_html = (f"<h3 style='text-align: {title_alignment};'>{name}</h3>" if show_titles else "")
             html_content += (
-                "<td style='border-left: 1px solid green; border-right: 1px solid green; "
+                f"<td style='border-left: 1px solid {color_line}; border-right: 1px solid {color_line}; "
                 "padding: 10px; vertical-align: top;'>"
-                f"<h3>{name}</h3>"
+                f"{title_html}"
                 f"<pre>{info}</pre>"
                 "</td>"
             )
         html_content += "</tr>"
     else:  # vertical orientation
         for name, info in infos:
+            title_html = (f"<h3 style='text-align: {title_alignment};'>{name}</h3>" if show_titles else "")
             html_content += (
-                "<tr><td style='border-top: 1px solid green; border-bottom: 1px solid green; "
+                f"<tr><td style='border-top: 1px solid {color_line}; border-bottom: 1px solid {color_line}; "
                 "padding: 10px; vertical-align: top;'>"
-                f"<h3>{name}</h3>"
+                f"{title_html}"
                 f"<pre>{info}</pre>"
                 "</td></tr>"
             )
@@ -171,7 +192,9 @@ def df_info_view(*dfs: pd.DataFrame,
 
 
 def df_shape_view(*dfs: pd.DataFrame,
-                  titles: Tuple = ()) -> None:
+                  titles: Tuple = (),
+                  show_titles: bool = True,
+                  title_alignment: str = 'left') -> None:
     """Displays the shape (number of rows and columns) of multiple pandas DataFrames.
 
     This function provides a quick overview of the dimensions of one or more pandas DataFrames.
@@ -181,6 +204,9 @@ def df_shape_view(*dfs: pd.DataFrame,
     dfs (*dfs: pd.DataFrame): One or more pandas DataFrames whose shapes will be displayed.
     titles (Tuple): An optional tuple for titles corresponding to each DataFrame. If not provided,
                     default titles like "Dataframe 1", "Dataframe 2", etc., are generated.
+    show_titles (bool): Controls the display of headings. By default, they are displayed.
+    title_alignment (str): Controls the position of the headers. Acceptable values: left, right, center.
+                           Defaults to 'left'
 
     Returns:
     None: Displays the shape information of the DataFrames directly in the Jupyter Notebook.
@@ -209,4 +235,6 @@ def df_shape_view(*dfs: pd.DataFrame,
 
     df_view(*dfs_shape,
             titles=titles,
-            orientation='hor')
+            orientation='hor',
+            show_titles=show_titles,
+            title_alignment=title_alignment)

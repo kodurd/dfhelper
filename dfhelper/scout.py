@@ -59,21 +59,23 @@ def summarize_df(df: pd.DataFrame):
             'Unique Values': unique_count,
         })
 
-        analysis_df = pd.DataFrame(analysis_data,
-                                   columns=['Column name', 'Column type', 'Total rows',
-                                            'Missing Values', 'Missing %',
-                                            'Zero Values', 'Zero %',
-                                            'Duplicate Values', 'Duplicate %',
-                                            'Complete Duplicate Rows', 'Complete Duplicate Rows %',
-                                            'Unique Values'])
+    analysis_df = pd.DataFrame(analysis_data,
+                               columns=['Column name', 'Column type', 'Total rows',
+                                        'Missing Values', 'Missing %',
+                                        'Zero Values', 'Zero %',
+                                        'Duplicate Values', 'Duplicate %',
+                                        'Complete Duplicate Rows', 'Complete Duplicate Rows %',
+                                        'Unique Values'])
 
-        return analysis_df
+    return analysis_df
 
 
 def summarize_dfs(*dfs: pd.DataFrame,
                   titles: Tuple = (),
                   display_html: bool = True,
-                  orientation: str = 'vert') -> Tuple[pd.DataFrame, ...]:
+                  orientation: str = 'vert',
+                  show_titles: bool = True,
+                  title_alignment: str = 'left') -> Tuple[pd.DataFrame, ...]:
     """Analyzes and summarizes multiple DataFrames, optionally displaying the results in HTML format.
 
     This function takes one or more DataFrames and performs a summary analysis on each of them,
@@ -86,6 +88,9 @@ def summarize_dfs(*dfs: pd.DataFrame,
     display_html (bool): Whether to display the summary in HTML format with the specified orientation. Defaults to True.
     orientation (str): Orientation of the HTML display, either 'vert' for vertical or 'hor' for horizontal.
                        Defaults to 'vert'.
+    show_titles (bool): Controls the display of headings. By default, they are displayed.
+    title_alignment (str): Controls the position of the headers. Acceptable values: left, right, center.
+                           Defaults to 'left'
 
     Returns:
     Tuple[pd.DataFrame, ...]: A tuple of pandas DataFrames, each containing the summary statistics
@@ -108,6 +113,8 @@ def summarize_dfs(*dfs: pd.DataFrame,
     if display_html:
         df_view(*dfs,
                 titles=titles,
-                orientation=orientation)
+                orientation=orientation,
+                show_titles=show_titles,
+                title_alignment=title_alignment)
 
     return tuple(dfs)

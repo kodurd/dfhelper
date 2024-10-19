@@ -16,7 +16,7 @@ df2 = pd.DataFrame(
              "C": [None, 4, 16, 101]}
         )
 
-df_view(df1, df2)
+df_view(df1, df2, orientation='hor')
 
 df_info_view(df1, df2)
 
